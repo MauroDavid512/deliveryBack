@@ -1,0 +1,25 @@
+{
+    "rest": [
+        {
+            "name": "Nipoti",
+            "img": "ajgoijahogi",
+            "adress": "mauro@gmail.com",
+            "phone": "320199933"
+
+        },
+        {
+            "name": "BurgerKing",
+            "img": "ajgoijahogi",
+            "adress": "mauro@gmail.com",
+            "phone": "320199933"
+
+        },
+        {
+            "name": "McDonalds",
+            "img": "ajgoijahogi",
+            "adress": "mauro@gmail.com",
+            "phone": "320199933"
+
+        }
+    ]
+}
