@@ -8,14 +8,15 @@ const { Restaurant, Users, Food } = require('../db.js');
 
 const restCreator = async (dataRest) => {
     try {
-        const { name, img, adress, phone} = dataRest; // esto para el req.body en post
+        const { name, img, adress, phone, shipping} = dataRest; // esto para el req.body en post
 
 
         const newRest = await Restaurant.create({
             name,
             img,
             adress,
-            phone
+            phone,
+            shipping
         });
     } catch (error) {
         console.log("Error en funcion restCreator", error.message);
@@ -194,7 +195,8 @@ const preloadRest = async () => {
                 name: rest.name,
                 img: rest.img,
                 adress: rest.adress,
-                phone: rest.phone
+                phone: rest.phone,
+                shipping: rest.shipping
 
             };
         });
