@@ -21,5 +21,35 @@
             "phone": "320199933"
 
         }
+    ],
+    "food": [
+        {
+            "name": "Hamburguesa",
+            "img": "ajgoijahogi",
+            "price": 1200,
+            "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
+            "rest":[2]    
+        },
+        {
+            "name": "Papas Fritas",
+            "img": "ajgoijahogi",
+            "price": 800,
+            "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
+            "rest":[2]
+        },
+        {
+            "name": "Mc'Combo",
+            "img": "ajgoijahogi",
+            "price": 1500,
+            "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
+            "rest":[3]
+        },
+        {
+            "name": "Ñoquis con Salsa",
+            "img": "ajgoijahogi",
+            "price": 950,
+            "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
+            "rest":[1]
+        }
     ]
 }

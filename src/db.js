@@ -37,7 +37,8 @@ const { Restaurant, Users, Food } = sequelize.models;
 
 Restaurant.belongsToMany(Users, {through: "restaurant_users"});
 Users.belongsToMany(Restaurant, {through: "restaurant_users"});
-
+Restaurant.belongsToMany(Food, {through:"restaurant_food"});
+Food.belongsToMany(Restaurant, {through: "restaurant_food"})
 
 
 module.exports = {
