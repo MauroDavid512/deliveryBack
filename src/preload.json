@@ -1,18 +1,69 @@
-{
+{   "users":[
+        {
+            "name": "Mauro David",
+            "img": "ajgoijahogi",
+            "email": "mauroalos@hotmail.com",
+            "birthday": "1995-06-30"
+        },
+        {
+            "name": "Leandro",
+            "img": "ajgoijahogi",
+            "email": "mauroalos@hotmail.com",
+            "birthday": "1995-06-30"
+        },
+        {
+            "name": "Alan",
+            "img": "ajgoijahogi",
+            "email": "mauroalos@hotmail.com",
+            "birthday": "1995-06-30"
+        },
+        {
+            "name": "Jaime",
+            "img": "ajgoijahogi",
+            "email": "mauroalos@hotmail.com",
+            "birthday": "1995-06-30"
+        },
+        {
+            "name": "Candelaria",
+            "img": "ajgoijahogi",
+            "email": "mauroalos@hotmail.com",
+            "birthday": "1995-06-30"
+        },
+        {
+            "name": "Maxi",
+            "img": "ajgoijahogi",
+            "email": "mauroalos@hotmail.com",
+            "birthday": "1995-06-30"
+        },
+        {
+            "name": "Angel",
+            "img": "ajgoijahogi",
+            "email": "mauroalos@hotmail.com",
+            "birthday": "1995-06-30"
+        },
+        {
+            "name": "Mauro David",
+            "img": "ajgoijahogi",
+            "email": "mauroalos@hotmail.com",
+            "birthday": "1995-06-30"
+        }
+],
     "rest": [
         {
             "name": "Nipoti",
             "img": "ajgoijahogi",
             "adress": "mauro@gmail.com",
             "phone": "320199933",
-            "shipping": 140
+            "shipping": 140,
+            "user":["1"]
         },
         {
             "name": "BurgerKing",
             "img": "ajgoijahogi",
             "adress": "mauro@gmail.com",
             "phone": "320199933",
-            "shipping": 99
+            "shipping": 99,
+            "user":["2"]
 
         },
         {
@@ -20,7 +71,8 @@
             "img": "ajgoijahogi",
             "adress": "mauro@gmail.com",
             "phone": "320199933",
-            "shipping": 230
+            "shipping": 230,
+            "user":["3"]
 
         }
     ],
@@ -30,28 +82,28 @@
             "img": "ajgoijahogi",
             "price": 1200,
             "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
-            "rest":[2]    
+            "rest":["2"]    
         },
         {
             "name": "Papas Fritas",
             "img": "ajgoijahogi",
             "price": 800,
             "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
-            "rest":[2]
+            "rest":["2"]
         },
         {
             "name": "Mc'Combo",
             "img": "ajgoijahogi",
             "price": 1500,
             "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
-            "rest":[3]
+            "rest":["3"]
         },
         {
             "name": "Ñoquis con Salsa",
             "img": "ajgoijahogi",
             "price": 950,
             "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
-            "rest":[1]
+            "rest":["1"]
         }
     ]
 }

@@ -8,8 +8,10 @@ const { Restaurant, Users, Food } = require('../db.js');
 
 const restCreator = async (dataRest) => {
     try {
-        const { name, img, adress, phone, shipping} = dataRest; // esto para el req.body en post
-
+        const { name, img, adress, phone, shipping, user} = dataRest; // esto para el req.body en post
+        let User = await Users.findAll({
+            where: {id: user}
+        })
 
         const newRest = await Restaurant.create({
             name,
@@ -18,6 +20,9 @@ const restCreator = async (dataRest) => {
             phone,
             shipping
         });
+        newRest.addUsers(User)
+        return newRest
+
     } catch (error) {
         console.log("Error en funcion restCreator", error.message);
     }
@@ -29,6 +34,7 @@ const restCreator = async (dataRest) => {
 
 const getAllRest = async () => {
     try {
+
         const allRest = await Restaurant.findAll({
             include: {
                 model: Food,
@@ -81,7 +87,15 @@ const getRestDetail = async (id) => {
 
 const getAllUsers = async () => {
     try {
-        const allUsers = await Users.findAll()
+        const allUsers = await Users.findAll({
+            include: {
+                model: Restaurant,
+                attributes: ['id','name','img'],
+                throug:{
+                    attributes: []
+                }
+            }
+        })
         return allUsers
         //Devuelve array con todos los restaurantes
 
@@ -98,7 +112,7 @@ const userCreator = async (dataUser) => {
         const aux2 = aux1.find(e => e.name === name)
 
 
-        const newRest = await Restaurant.create({
+        const newRest = await Users.create({
             name,
             img,
             email,
@@ -187,6 +201,28 @@ const getFood = async (idRest) => {
 
 const preload = require("../preload.json")
 
+const preloadUsers = async () => {
+
+    try {
+        let data = preload.users.map((user) => {
+            return {
+                name: user.name,
+                img: user.img,
+                email: user.email,
+                birthday: user.birthday
+
+            };
+        });
+
+        for (const user of data) {
+            userCreator(user);
+        }
+        return data;
+    } catch (error) {
+        console.log("ERROR EN preloadUsers", error.message);
+    }
+};
+
 const preloadRest = async () => {
 
     try {
@@ -196,7 +232,8 @@ const preloadRest = async () => {
                 img: rest.img,
                 adress: rest.adress,
                 phone: rest.phone,
-                shipping: rest.shipping
+                shipping: rest.shipping,
+                user: rest.user
 
             };
         });
@@ -244,6 +281,7 @@ module.exports = {
     getFood,
     foodCreator,
     //Preloads
+    preloadUsers,
     preloadRest,
     preloadFood
 }
