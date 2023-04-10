@@ -1,7 +1,7 @@
 //Aqui estarán todas las funciones que se utilizaran durante el ruteo.
 
 const axios = require('axios')
-const { Restaurant, Users, Food } = require('../db.js');
+const { Restaurant, Users, Food ,Categories} = require('../db.js');
 
 
 // Funciones de /rest
@@ -28,6 +28,18 @@ const restCreator = async (dataRest) => {
     }
 };
 
+
+
+const restUpdating = async (id, restaurantData) => {
+      try {
+          const restaurant = await Restaurant.update(restaurantData, { where: { id } });
+
+          return restaurant;
+      } catch (err) {
+          throw err;
+      }
+
+  }
 
 
 
@@ -270,9 +282,45 @@ const preloadFood = async () => {
     }
 };
 
+const preloadCategories = async () => {
+
+  try {
+      let data = preload.categories.map((category) => {
+          return {
+              name: category.name,
+          };
+      });
+
+      for (const category of data) {
+          createCategory(category);
+      }
+      return data;
+  } catch (error) {
+      console.log("ERROR EN preloadCategories", error.message);
+  }
+};
+
+//----------FUNCIONES DE CATEGORIAS-------------------
+const getCategories = async () => {
+  try {
+    const allCategories = await Categories.findAll();
+    return allCategories;
+  } catch (error) {
+    console.log("Error en getCategories", error.message);
+  }
+}
+const createCategory = async (body) => {
+  try {
+    const creation = await Categories.create(body);
+    return creation;
+  } catch (error) {
+    console.log("Error en getCategories", error.message);
+  }
+}
 
 module.exports = {
     restCreator,
+    restUpdating,
     getAllRest,
     getRestDetail,
     userCreator,
@@ -280,9 +328,12 @@ module.exports = {
     getUserDetail,
     getFood,
     foodCreator,
+    getCategories,
+    createCategory,
     //Preloads
     preloadUsers,
     preloadRest,
-    preloadFood
+    preloadFood,
+    preloadCategories
 }
 

@@ -1,109 +1,126 @@
-{   "users":[
-        {
-            "name": "Mauro David",
-            "img": "ajgoijahogi",
-            "email": "mauroalos@hotmail.com",
-            "birthday": "1995-06-30"
-        },
-        {
-            "name": "Leandro",
-            "img": "ajgoijahogi",
-            "email": "mauroalos@hotmail.com",
-            "birthday": "1995-06-30"
-        },
-        {
-            "name": "Alan",
-            "img": "ajgoijahogi",
-            "email": "mauroalos@hotmail.com",
-            "birthday": "1995-06-30"
-        },
-        {
-            "name": "Jaime",
-            "img": "ajgoijahogi",
-            "email": "mauroalos@hotmail.com",
-            "birthday": "1995-06-30"
-        },
-        {
-            "name": "Candelaria",
-            "img": "ajgoijahogi",
-            "email": "mauroalos@hotmail.com",
-            "birthday": "1995-06-30"
-        },
-        {
-            "name": "Maxi",
-            "img": "ajgoijahogi",
-            "email": "mauroalos@hotmail.com",
-            "birthday": "1995-06-30"
-        },
-        {
-            "name": "Angel",
-            "img": "ajgoijahogi",
-            "email": "mauroalos@hotmail.com",
-            "birthday": "1995-06-30"
-        },
-        {
-            "name": "Mauro David",
-            "img": "ajgoijahogi",
-            "email": "mauroalos@hotmail.com",
-            "birthday": "1995-06-30"
-        }
-],
-    "rest": [
-        {
-            "name": "Nipoti",
-            "img": "ajgoijahogi",
-            "adress": "mauro@gmail.com",
-            "phone": "320199933",
-            "shipping": 140,
-            "user":["1"]
-        },
-        {
-            "name": "BurgerKing",
-            "img": "ajgoijahogi",
-            "adress": "mauro@gmail.com",
-            "phone": "320199933",
-            "shipping": 99,
-            "user":["2"]
-
-        },
-        {
-            "name": "McDonalds",
-            "img": "ajgoijahogi",
-            "adress": "mauro@gmail.com",
-            "phone": "320199933",
-            "shipping": 230,
-            "user":["3"]
-
-        }
-    ],
-    "food": [
-        {
-            "name": "Hamburguesa",
-            "img": "ajgoijahogi",
-            "price": 1200,
-            "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
-            "rest":["2"]    
-        },
-        {
-            "name": "Papas Fritas",
-            "img": "ajgoijahogi",
-            "price": 800,
-            "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
-            "rest":["2"]
-        },
-        {
-            "name": "Mc'Combo",
-            "img": "ajgoijahogi",
-            "price": 1500,
-            "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
-            "rest":["3"]
-        },
-        {
-            "name": "Ñoquis con Salsa",
-            "img": "ajgoijahogi",
-            "price": 950,
-            "description": "adjahfoahgohaoifjoauhfoiahgoahgpjagoiaj",
-            "rest":["1"]
-        }
-    ]
+{
+	"users": [
+		{
+			"name": "Mauro David",
+			"img": "ajgoijahogi",
+			"email": "mauroalos@hotmail.com",
+			"birthday": "1995-06-30"
+		},
+		{
+			"name": "Leandro",
+			"img": "ajgoijahogi",
+			"email": "mauroalos@hotmail.com",
+			"birthday": "1995-06-30"
+		},
+		{
+			"name": "Alan",
+			"img": "ajgoijahogi",
+			"email": "mauroalos@hotmail.com",
+			"birthday": "1995-06-30"
+		},
+		{
+			"name": "Jaime",
+			"img": "ajgoijahogi",
+			"email": "mauroalos@hotmail.com",
+			"birthday": "1995-06-30"
+		},
+		{
+			"name": "Candelaria",
+			"img": "ajgoijahogi",
+			"email": "mauroalos@hotmail.com",
+			"birthday": "1995-06-30"
+		},
+		{
+			"name": "Maxi",
+			"img": "ajgoijahogi",
+			"email": "mauroalos@hotmail.com",
+			"birthday": "1995-06-30"
+		},
+		{
+			"name": "Angel",
+			"img": "ajgoijahogi",
+			"email": "mauroalos@hotmail.com",
+			"birthday": "1995-06-30"
+		},
+		{
+			"name": "Mauro David",
+			"img": "ajgoijahogi",
+			"email": "mauroalos@hotmail.com",
+			"birthday": "1995-06-30"
+		}
+	],
+	"rest": [
+		{
+			"name": "Sushi maniacos",
+			"img": "https://media-cdn.tripadvisor.com/media/photo-s/1a/53/aa/26/somos-un-restaurante.jpg",
+			"adress": "San Juan 3432",
+			"phone": "320199933",
+			"shipping": 140,
+			"user": ["1"]
+		},
+		{
+			"name": "BurgerKing",
+			"img": "https://assets.entrepreneur.com/content/3x2/2000/1645822504-GettyImages-1370781946.jpg",
+			"adress": "Santiago 3432",
+			"phone": "320199933",
+			"shipping": 99,
+			"user": ["2"]
+		},
+		{
+			"name": "McDonalds",
+			"img": "https://cdn.computerhoy.com/sites/navi.axelspringer.es/public/media/image/2018/05/secretos-mcdonalds.jpg?tf=3840x",
+			"adress": "Av. Lagos 3432",
+			"phone": "320199933",
+			"shipping": 230,
+			"user": ["3"]
+		},
+		{
+			"name": "El Asador Argentino",
+			"img": "https://www.disfrutandosingluten.es/wp-content/uploads/2018/11/Restaurantes-Comida-Rapida-Espana-sin-gluten.jpg",
+			"adress": "Av. Oroño 3432",
+			"phone": "320199933",
+			"shipping": 230,
+			"user": ["3"]
+		}
+	],
+	"food": [
+		{
+			"name": "Pizza a la piedra",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg",
+			"price": 1200,
+			"description": "Pizza a la piedra con salsa de tomate, queso mozzarella y jamón cocido",
+			"rest": ["2"]
+		},
+		{
+			"name": "Burrito mexicano",
+			"img": "https://assets.unileversolutions.com/recipes-v2/218407.jpg",
+			"price": 800,
+			"description": "Burrito mexicano con salsa de tomate, queso mozzarella y jamón cocido",
+			"rest": ["2"]
+		},
+		{
+			"name": "Mc'Combo",
+			"img": "https://images.rappi.com.ar/restaurants_background/mcdonaldscol-1660251198623.jpg",
+			"price": 1500,
+			"description": "Infaltable Mc'Combo Big Mac con papas y bebida",
+			"rest": ["3"]
+		},
+		{
+			"name": "Super pancho con papas",
+			"img": "https://cdn.pedix.app/rEGrDroIkaQVrMD1XNUZ/categories/1592945456416.png?size=1500x1500",
+			"price": 950,
+			"description": "Super pancho con salsa de tomate, queso mozzarella y jamón cocido",
+			"rest": ["1"]
+		}
+	],
+	"categories": [
+		{ "id": 1, "name": "Hamburguesas" },
+		{ "id": 2, "name": "Sushi" },
+		{ "id": 3, "name": "Pizza" },
+		{ "id": 4, "name": "Comida arabe" },
+		{ "id": 5, "name": "Comida china" },
+		{ "id": 6, "name": "Comida italiana" },
+		{ "id": 7, "name": "Comida mexicana" },
+		{ "id": 8, "name": "Comida rapida" }
+	]
 }
