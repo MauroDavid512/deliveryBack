@@ -1,16 +1,16 @@
 //Aqui estarán todas las funciones que se utilizaran durante el ruteo.
 
 const axios = require('axios')
-const { Restaurant, Users, Food ,Categories} = require('../db.js');
+const { Restaurant, Users, Food, Categories } = require('../db.js');
 
 
 // Funciones de /rest
 
 const restCreator = async (dataRest) => {
     try {
-        const { name, img, adress, phone, shipping, user} = dataRest; // esto para el req.body en post
+        const { name, img, adress, phone, shipping, user, description } = dataRest; // esto para el req.body en post
         let User = await Users.findAll({
-            where: {id: user}
+            where: { id: user }
         })
 
         const newRest = await Restaurant.create({
@@ -18,7 +18,8 @@ const restCreator = async (dataRest) => {
             img,
             adress,
             phone,
-            shipping
+            shipping,
+            description
         });
         newRest.addUsers(User)
         return newRest
@@ -31,15 +32,15 @@ const restCreator = async (dataRest) => {
 
 
 const restUpdating = async (id, restaurantData) => {
-      try {
-          const restaurant = await Restaurant.update(restaurantData, { where: { id } });
+    try {
+        const restaurant = await Restaurant.update(restaurantData, { where: { id } });
 
-          return restaurant;
-      } catch (err) {
-          throw err;
-      }
+        return restaurant;
+    } catch (err) {
+        throw err;
+    }
 
-  }
+}
 
 
 
@@ -50,8 +51,8 @@ const getAllRest = async () => {
         const allRest = await Restaurant.findAll({
             include: {
                 model: Food,
-                attributes: ['id','name','img', 'price'],
-                throug:{
+                attributes: ['id', 'name', 'img', 'price', 'description'],
+                throug: {
                     attributes: []
                 }
             }
@@ -64,7 +65,7 @@ const getAllRest = async () => {
 
 
 
-const getRestDetail = async (id) => {
+const getRestDetail = async (id, menu) => {
     const allRest = await getAllRest()
 
     /*
@@ -72,7 +73,7 @@ const getRestDetail = async (id) => {
     buscaré un restaurante por su numero de id como para buscarlo por su nombre
     */
 
-    if (typeof (id) === 'number') {
+    if (typeof (id) === 'number' && !menu) {
         try {
             const rest = allRest.find(e => e.id === id)
             // console.log('numero ', pokemon)
@@ -80,19 +81,28 @@ const getRestDetail = async (id) => {
         } catch (error) {
             console.log('Error en getRestDetail con id numerico', error.message)
         }
-    }else if(typeof (id) === 'string') {
+    } else if (typeof (id) === 'string') {
         try {
             const rest = allRest.filter(e => e.name === id)
-            if(rest.length > 0){
-                return  rest
-            }else{
+            if (rest.length > 0) {
+                return rest
+            } else {
                 throw new Error("No se encuentra al restaurante")
             }
         } catch (error) {
             console.log('Error en getRestDetail con id string', error.message)
         }
+    } else if (menu) {
+        try {
+            const rest = allRest.find(e => e.id === id)
+            return rest.food
+        } catch (error) {
+
+        }
     }
 }
+
+
 
 
 // Funciones de  /users
@@ -102,8 +112,8 @@ const getAllUsers = async () => {
         const allUsers = await Users.findAll({
             include: {
                 model: Restaurant,
-                attributes: ['id','name','img'],
-                throug:{
+                attributes: ['id', 'name', 'img'],
+                throug: {
                     attributes: []
                 }
             }
@@ -118,7 +128,7 @@ const getAllUsers = async () => {
 
 const userCreator = async (dataUser) => {
     try {
-        const { name, img, email, birthday} = dataUser; // esto para el req.body en post
+        const { name, img, email, birthday } = dataUser; // esto para el req.body en post
         const aux1 = await getAllUsers()
         //Traigo los datos existentes en la base para corroborar que no se repita ningun pokemon
         const aux2 = aux1.find(e => e.name === name)
@@ -151,7 +161,7 @@ const getUserDetail = async (id) => {
         } catch (error) {
             console.log('Error en getUserDetail con id numerico', error.message)
         }
-    }else if(typeof (id) === 'string') {
+    } else if (typeof (id) === 'string') {
         try {
             const user = allUser.filter(e => e.name === id)
             return user
@@ -166,9 +176,9 @@ const getUserDetail = async (id) => {
 
 const foodCreator = async (dataFood) => {
     try {
-        const { name, img, price, description, rest} = dataFood; // esto para el req.body en post
+        const { name, img, price, description, rest } = dataFood; // esto para el req.body en post
         let Rest = await Restaurant.findAll({
-            where: {id: rest}
+            where: { id: rest }
         })
         const newFood = await Food.create({
             name,
@@ -187,22 +197,23 @@ const foodCreator = async (dataFood) => {
 };
 
 const getFood = async (idRest) => {
-    try{
+    try {
         const allFood = await Food.findAll({
             include: {
                 model: Restaurant,
-                attributes: ['id','name','img'],
-                throug:{
+                attributes: ['id', 'name', 'img'],
+                throug: {
                     attributes: []
                 }
             }
         })
-        if(idRest){
-            let foodRest = allFood.filter(e => e.restaurantId === idRest)
-        }else{
+        // if (idRest) {
+        //     let foodRest = allFood.filter(e => e.restaurantId === idRest)
+        //     return foodRest
+        // } else {
             return allFood
-        }
-    }catch(error){
+        // }
+    } catch (error) {
         console.log("Error en funcion getFood", error.message)
     }
 }
@@ -245,7 +256,8 @@ const preloadRest = async () => {
                 adress: rest.adress,
                 phone: rest.phone,
                 shipping: rest.shipping,
-                user: rest.user
+                user: rest.user,
+                description: rest.description
 
             };
         });
@@ -284,38 +296,38 @@ const preloadFood = async () => {
 
 const preloadCategories = async () => {
 
-  try {
-      let data = preload.categories.map((category) => {
-          return {
-              name: category.name,
-          };
-      });
+    try {
+        let data = preload.categories.map((category) => {
+            return {
+                name: category.name,
+            };
+        });
 
-      for (const category of data) {
-          createCategory(category);
-      }
-      return data;
-  } catch (error) {
-      console.log("ERROR EN preloadCategories", error.message);
-  }
+        for (const category of data) {
+            createCategory(category);
+        }
+        return data;
+    } catch (error) {
+        console.log("ERROR EN preloadCategories", error.message);
+    }
 };
 
 //----------FUNCIONES DE CATEGORIAS-------------------
 const getCategories = async () => {
-  try {
-    const allCategories = await Categories.findAll();
-    return allCategories;
-  } catch (error) {
-    console.log("Error en getCategories", error.message);
-  }
+    try {
+        const allCategories = await Categories.findAll();
+        return allCategories;
+    } catch (error) {
+        console.log("Error en getCategories", error.message);
+    }
 }
 const createCategory = async (body) => {
-  try {
-    const creation = await Categories.create(body);
-    return creation;
-  } catch (error) {
-    console.log("Error en getCategories", error.message);
-  }
+    try {
+        const creation = await Categories.create(body);
+        return creation;
+    } catch (error) {
+        console.log("Error en getCategories", error.message);
+    }
 }
 
 module.exports = {

@@ -7,9 +7,19 @@ const { preloadUsers, preloadRest, preloadFood,preloadCategories } = require('./
 conn.sync({ force: true }).then(() => {
   server.listen(3001, () => {
     preloadUsers()
-    preloadRest()
-    preloadFood()
+    setTimeout(()=>{
+      preloadRest()
+    },1000)
+    setTimeout(()=>{
+      preloadFood()
+    },2000)
+    
     preloadCategories()
     console.log('%s listening at 3001'); // eslint-disable-line no-console
   });
 });
+
+
+setTimeout(()=>{
+
+},1000)

@@ -50,8 +50,15 @@ router.put('/restUpdate/:id', async (req, res, next) => {
 
 router.get("/:id", async (req, res) => {
   try {
+    const menu = req.query.menu
     const id = req.params.id
-    const info = await getRestDetail(parseInt(id))
+    let info = []
+    if(menu){
+      info = await getRestDetail(parseInt(id),menu)
+    }else{
+      info = await getRestDetail(parseInt(id),menu)
+    }
+
     res.status(200).json(info)
   } catch (error) {
     res.status(404).json({ error: error.message })

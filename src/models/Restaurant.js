@@ -31,6 +31,10 @@ module.exports = (sequelize) => {
     shipping: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull:true
     }
   });
 };

@@ -114,13 +114,13 @@
 		}
 	],
 	"categories": [
-		{ "id": 1, "name": "Hamburguesas" },
-		{ "id": 2, "name": "Sushi" },
-		{ "id": 3, "name": "Pizza" },
-		{ "id": 4, "name": "Comida arabe" },
-		{ "id": 5, "name": "Comida china" },
-		{ "id": 6, "name": "Comida italiana" },
-		{ "id": 7, "name": "Comida mexicana" },
-		{ "id": 8, "name": "Comida rapida" }
+		{"name": "Hamburguesas" },
+		{"name": "Sushi" },
+		{"name": "Pizza" },
+		{"name": "Comida arabe" },
+		{"name": "Comida china" },
+		{"name": "Comida italiana" },
+		{"name": "Comida mexicana" },
+		{"name": "Comida rapida" }
 	]
 }
