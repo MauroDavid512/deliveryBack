@@ -45,19 +45,28 @@ const restUpdating = async (id, restaurantData) => {
 
 
 
-const getAllRest = async () => {
+const getAllRest = async (category) => {
     try {
 
         const allRest = await Restaurant.findAll({
             include: {
                 model: Food,
-                attributes: ['id', 'name', 'img', 'price', 'description'],
+                attributes: ['id', 'name', 'img', 'price', 'description', 'categories'],
                 throug: {
                     attributes: []
                 }
             }
         })
-        return allRest
+        if(category){
+            const filtered = allRest.filter(e => e.food.map(el => {
+                console.log(el.categories)
+                el.categories.includes(category)}
+                )
+            )
+            return filtered
+        }else{
+            return allRest
+        }
     } catch (error) {
         console.log('Error en getAllRest ', error.message)
     }
@@ -176,7 +185,7 @@ const getUserDetail = async (id) => {
 
 const foodCreator = async (dataFood) => {
     try {
-        const { name, img, price, description,category, rest } = dataFood; // esto para el req.body en post
+        const { name, img, price, description,categories, rest } = dataFood; // esto para el req.body en post
         let Rest = await Restaurant.findAll({
             where: { id: rest }
         })
@@ -185,7 +194,7 @@ const foodCreator = async (dataFood) => {
             img,
             price,
             description,
-            category
+            categories
         });
 
         newFood.addRestaurant(Rest)
@@ -214,7 +223,7 @@ const getFood = async (idRest, category, minPrice, maxPrice) => {
             aux = aux.filter(e => e.restaurants[0].id == idRest)
         }
         if(category){
-            aux = aux.filter(e => e.category.includes(category))
+            aux = aux.filter(e => e.categories.includes(category))
         }
         if(minPrice){
             aux = aux.filter(e => e.price >= minPrice)
@@ -231,7 +240,7 @@ const getFood = async (idRest, category, minPrice, maxPrice) => {
 }
 
 const getFoodDetail = async (id) => {
-    const allUser = await getFood()
+    const allFood = await getFood()
 
     /*
     El proximo condicional me permite emplear esta misma funcion tanto cuando
@@ -261,7 +270,7 @@ const getCategoriess = async () => {
     const allFood = await Food.findAll()
     let categories = []
     allFood.forEach(e => {
-        categories.push(...e.category)
+        categories.push(...e.categories)
     });
     const uniqueCategories = categories.filter((element, index, array) => {
         return index === array.indexOf(element);
@@ -337,7 +346,7 @@ const preloadFood = async () => {
                 price: food.price,
                 description: food.description,
                 rest: food.rest,
-                category: food.category
+                categories: food.categories
 
             };
         });

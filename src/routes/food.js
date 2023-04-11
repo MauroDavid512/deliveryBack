@@ -20,7 +20,6 @@ router.get('/', async (req, res) => {
         if (name) {
             try {
                 const restDetail = await getFoodDetail(name)
-
                 res.status(200).json(restDetail)
             } catch (error) {
                 res.status(404).json({ error: error.message })

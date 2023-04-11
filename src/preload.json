@@ -90,7 +90,7 @@
 			"price": 1200,
 			"description": "Pizza a la piedra con salsa de tomate, queso mozzarella y jamón cocido",
 			"rest": ["2"],
-			"category":["Pizza", "Comida Italiana"]
+			"categories":["Pizza", "Comida Italiana"]
 		},
 		{
 			"name": "Burrito mexicano",
@@ -98,7 +98,7 @@
 			"price": 800,
 			"description": "Burrito mexicano con salsa de tomate, queso mozzarella y jamón cocido",
 			"rest": ["2"],
-			"category":["Comida Mexicana"]
+			"categories":["Comida Mexicana"]
 		},
 		{
 			"name": "Mc'Combo",
@@ -106,7 +106,7 @@
 			"price": 1500,
 			"description": "Infaltable Mc'Combo Big Mac con papas y bebida",
 			"rest": ["3"],
-			"category":["Hamburguesa", "Combo", "Comida Rápida"]
+			"categories":["Hamburguesa", "Combo", "Comida Rápida"]
 		},
 		{
 			"name": "Super pancho con papas",
@@ -114,7 +114,7 @@
 			"price": 950,
 			"description": "Super pancho con salsa de tomate, queso mozzarella y jamón cocido",
 			"rest": ["1"],
-			"category":["Comida Rápida"]
+			"categories":["Comida Rápida"]
 		}
 	],
 	"categories": [

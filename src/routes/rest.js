@@ -4,8 +4,8 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   try {
-    const info = await getAllRest()
-    const { name } = req.query
+    const { name, category } = req.query
+    const info = await getAllRest(category)
     if (name) {
       try {
         const restDetail = await getRestDetail(name)

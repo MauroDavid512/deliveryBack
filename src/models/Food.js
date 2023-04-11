@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    category: {
+    categories: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true
     }
