@@ -197,9 +197,11 @@ const foodCreator = async (dataFood) => {
     }
 };
 
-const getFood = async (idRest) => {
-    try {
-        const allFood = await Food.findAll({
+
+
+const getFood = async (idRest, category, minPrice, maxPrice) => {
+    try{
+        let aux = await Food.findAll({
             include: {
                 model: Restaurant,
                 attributes: ['id', 'name', 'img'],
@@ -208,15 +210,24 @@ const getFood = async (idRest) => {
                 }
             }
         })
-        if (idRest) {
-            let foodRest = allFood.filter(e => e.restaurants[0].id == idRest)
-            return foodRest
-        } else {
-            return allFood
+        if(idRest){
+            aux = aux.filter(e => e.restaurants[0].id == idRest)
         }
-    } catch (error) {
-        console.log("Error en funcion getFood", error.message)
+        if(category){
+            aux = aux.filter(e => e.category.includes(category))
+        }
+        if(minPrice){
+            aux = aux.filter(e => e.price >= minPrice)
+        }
+        if(maxPrice){
+            aux = aux.filter(e => e.price <= maxPrice)
+        }
+    
+        return aux
+    }catch(error){
+        console.log('Error en getFood ', error.message)
     }
+
 }
 
 const getFoodDetail = async (id) => {
@@ -259,23 +270,7 @@ const getCategoriess = async () => {
       return uniqueCategories;
 }
 
-const filterFood = async (idRest, category, minPrice, maxPrice) => {
-    let aux = await Food.findAll()
-    if(idRest){
-        aux = await getFood(idRest)
-    }
-    if(category){
-        aux = aux.filter(e => e.category.includes(category))
-    }
-    if(minPrice){
-        aux = aux.filter(e => e.price >= minPrice)
-    }
-    if(maxPrice){
-        aux = aux.filter(e => e.price <= maxPrice)
-    }
 
-    return aux
-}
 
 
 
@@ -406,7 +401,6 @@ module.exports = {
     getCategories,
     getCategoriess,
     createCategory,
-    filterFood,
     //Preloads
     preloadUsers,
     preloadRest,
