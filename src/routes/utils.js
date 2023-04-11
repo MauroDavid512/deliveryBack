@@ -176,7 +176,7 @@ const getUserDetail = async (id) => {
 
 const foodCreator = async (dataFood) => {
     try {
-        const { name, img, price, description, rest } = dataFood; // esto para el req.body en post
+        const { name, img, price, description,category, rest } = dataFood; // esto para el req.body en post
         let Rest = await Restaurant.findAll({
             where: { id: rest }
         })
@@ -184,7 +184,8 @@ const foodCreator = async (dataFood) => {
             name,
             img,
             price,
-            description
+            description,
+            category
         });
 
         newFood.addRestaurant(Rest)
@@ -207,16 +208,76 @@ const getFood = async (idRest) => {
                 }
             }
         })
-        // if (idRest) {
-        //     let foodRest = allFood.filter(e => e.restaurantId === idRest)
-        //     return foodRest
-        // } else {
+        if (idRest) {
+            let foodRest = allFood.filter(e => e.restaurants[0].id == idRest)
+            return foodRest
+        } else {
             return allFood
-        // }
+        }
     } catch (error) {
         console.log("Error en funcion getFood", error.message)
     }
 }
+
+const getFoodDetail = async (id) => {
+    const allUser = await getFood()
+
+    /*
+    El proximo condicional me permite emplear esta misma funcion tanto cuando
+    buscaré una comida por su numero de id como para filtrarlo por su nombre
+    */
+
+    if (typeof (id) === 'number') {
+        try {
+            const food = allFood.find(e => e.id === id)
+            // console.log('numero ', pokemon)
+            return food
+        } catch (error) {
+            console.log('Error en getFoodDetail con id numerico', error.message)
+        }
+    } else if (typeof (id) === 'string') {
+        try {
+            const food = allFood.filter(e => e.name === id)
+            return food
+        } catch (error) {
+            console.log('Error en getFoodDetail con id string', error.message)
+        }
+    }
+}
+
+
+const getCategoriess = async () => {
+    const allFood = await Food.findAll()
+    let categories = []
+    allFood.forEach(e => {
+        categories.push(...e.category)
+    });
+    const uniqueCategories = categories.filter((element, index, array) => {
+        return index === array.indexOf(element);
+      });
+    
+      return uniqueCategories;
+}
+
+const filterFood = async (idRest, category, minPrice, maxPrice) => {
+    let aux = await Food.findAll()
+    if(idRest){
+        aux = await getFood(idRest)
+    }
+    if(category){
+        aux = aux.filter(e => e.category.includes(category))
+    }
+    if(minPrice){
+        aux = aux.filter(e => e.price >= minPrice)
+    }
+    if(maxPrice){
+        aux = aux.filter(e => e.price <= maxPrice)
+    }
+
+    return aux
+}
+
+
 
 
 
@@ -280,7 +341,8 @@ const preloadFood = async () => {
                 img: food.img,
                 price: food.price,
                 description: food.description,
-                rest: food.rest
+                rest: food.rest,
+                category: food.category
 
             };
         });
@@ -340,8 +402,11 @@ module.exports = {
     getUserDetail,
     getFood,
     foodCreator,
+    getFoodDetail,
     getCategories,
+    getCategoriess,
     createCategory,
+    filterFood,
     //Preloads
     preloadUsers,
     preloadRest,
