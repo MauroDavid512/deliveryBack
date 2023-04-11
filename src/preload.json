@@ -115,7 +115,17 @@
 			"description": "Super pancho con salsa de tomate, queso mozzarella y jamón cocido",
 			"rest": ["1"],
 			"categories":["Comida Rápida"]
+		},
+		{
+			"name": "Super pancho con papas y gaseosa",
+			"img": "https://cdn.pedix.app/rEGrDroIkaQVrMD1XNUZ/categories/1592945456416.png?size=1500x1500",
+			"price": 1200,
+			"description": "Super pancho con salsa de tomate, queso mozzarella y jamón cocido. Incluye gaseosa de 400ml",
+			"rest": ["1"],
+			"categories":["Comida Rápida"],
+			"promo": true
 		}
+
 	],
 	"categories": [
 		{"name": "Hamburguesas" },

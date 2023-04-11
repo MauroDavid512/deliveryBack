@@ -23,6 +23,11 @@ module.exports = (sequelize) => {
     categories: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true
+    },
+    promo: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
     }
   });
 };

@@ -1,0 +1,75 @@
+Utilización de rutas:
+
+Restaurantes:
+
+rest/
+
+Si se utiliza solo se obtiene un array con todos los restaurantes en base de datos.
+
+rest/1
+
+Cuando se coloca un número seguido de "rest/" se obtiene un detalle del restaurante que tenga un id igual al número
+
+rest/restCreator
+
+Esta ruta es la que se emplea para la creación de restaurantes
+El objeto que debe recibir debe tener el siguiente formato:
+{
+    name: STRING,
+    img: STRING,
+    adress: STRING,
+    phone: NUMBER,
+    shipping: NUMBER,
+    description: TEXT,
+    user: [IdDelUsuario]
+}
+
+Comida:
+
+food/
+
+Si se utiliza solo se obtiene un array con todas las comidas en base de datos.
+
+Pero a su vez se le pueden aplicar querys para filtrar los valores. Por ejemplo:
+
+?idrest=1   ----> entrega array de comidas pertenecientes al restaruante de id = 1
+
+?category=Pizza   ----> entrega array de comidas pertenecientes a la categoria "Pizza"
+
+?minprice=1000  o  ?maxprice=2000   ----> entrega array con las comidas que estén en ese rango de precios
+
+?promo=1  ----> En este caso no es requisito que sea "1", puede ser cualquier cosa mientras que retorne un valor true. Entrega array con comidas que tengan propiedad promo en true.
+
+Todas son combinables. Para combinarlas se debe emplear "&" de la siguiente forma:
+
+"food?idrest=2&category=Hamburguesa&minprice=1000&maxprice=3000"
+
+En el ejemplo se obtendría un array de las comidas pertenecientes al restaurant cuya "id" sea igual a 2, que posean categoria "Hamburguesa" y que su precio esté entre 1000 y 3000.
+
+food/foodCreator
+
+Esta ruta es la que se emplea para la creación de comidas
+El objeto que debe recibir debe tener el siguiente formato:
+{
+    name: STRING,
+    img: STRING,
+    price: INTEGER,
+    description: TEXT,
+    categories: ["Categoria1", "Categoria2"],
+    promo: false
+    rest: [idDelRestaurante]
+}
+
+Se le puede colocar infinitas categorias y la propiedad promo solo es necesaria si se coloca en true. De lo contrario se puede omitir.
+
+/food/categories
+
+Traerá un array con las categorías disponibles
+
+/food/2
+
+Traerá un detalle de la comida cuyo id sea igual a 2
+
+
+
+

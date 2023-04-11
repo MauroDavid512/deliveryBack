@@ -185,7 +185,7 @@ const getUserDetail = async (id) => {
 
 const foodCreator = async (dataFood) => {
     try {
-        const { name, img, price, description,categories, rest } = dataFood; // esto para el req.body en post
+        const { name, img, price, description,categories, rest, promo } = dataFood; // esto para el req.body en post
         let Rest = await Restaurant.findAll({
             where: { id: rest }
         })
@@ -194,7 +194,8 @@ const foodCreator = async (dataFood) => {
             img,
             price,
             description,
-            categories
+            categories,
+            promo
         });
 
         newFood.addRestaurant(Rest)
@@ -208,7 +209,7 @@ const foodCreator = async (dataFood) => {
 
 
 
-const getFood = async (idRest, category, minPrice, maxPrice) => {
+const getFood = async (idRest, category, minPrice, maxPrice, promo) => {
     try{
         let aux = await Food.findAll({
             include: {
@@ -230,6 +231,9 @@ const getFood = async (idRest, category, minPrice, maxPrice) => {
         }
         if(maxPrice){
             aux = aux.filter(e => e.price <= maxPrice)
+        }
+        if(promo){
+            aux = aux.filter(e => e.promo === true)
         }
     
         return aux
@@ -346,7 +350,8 @@ const preloadFood = async () => {
                 price: food.price,
                 description: food.description,
                 rest: food.rest,
-                categories: food.categories
+                categories: food.categories,
+                promo: food.promo
 
             };
         });
