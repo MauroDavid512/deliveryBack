@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { restCreator, getAllRest, getRestDetail, restUpdating } = require('./utils')
+const { restCreator, getAllRest, getRestDetail, getRating } = require('./utils')
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -35,17 +35,15 @@ router.post('/restCreator', async (req, res) => {
 
 )
 
-router.put('/restUpdate/:id', async (req, res, next) => {
-
-  const { id } = req.params;
-
-  try {
-      const restaurant = await restUpdating(id, req.body);
-      return res.status(200).json({ success: true, data: restaurant });
-  } catch (err) {
-      return res.status(400).json({ success: false, message: err.message });
+router.get('/rating/:id', async (req, res) => {
+  try{
+    const idRest = req.params.id
+    const info = getRating(idRest)
+    res.status(200).json(info)
+  }catch(error){
+    res.status(404).json({ error: error.message })
   }
-});
+})
 
 
 router.get("/:id", async (req, res) => {

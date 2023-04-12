@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { getFood, foodCreator, getFoodDetail, getCategoriess } = require('./utils')
+const { getFood, foodCreator, getFoodDetail, getCategories } = require('./utils')
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -66,7 +66,7 @@ router.post('/foodCreator', async (req, res) => {
 
 router.get("/categories", async (req, res) => {
     try {
-        const categories = await getCategoriess()
+        const categories = await getCategories()
         res.status(200).json(categories)
     } catch (error) {
         res.status(404).json({ error: error.message })

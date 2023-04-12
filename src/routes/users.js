@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const {userCreator, getAllUsers, getUserDetail} = require('./utils')
+const {userCreator, getAllUsers, getUserDetail, doRating} = require('./utils')
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -21,6 +21,19 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.put('/rating', async (req, res) => {
+    try{
+        const {userId, restId} = req.query
+        const {qualification} = req.body
+        const info = await doRating(userId, restId, qualification)
+        res.status(201).json(info)
+
+    }catch(error){
+        res.status(400).json({ error: error.message })
+    }
+}
+
+)
 
 
 router.post('/userCreator', async (req, res) => {

@@ -19,6 +19,10 @@ module.exports = (sequelize) => {
     birthday: {
       type: DataTypes.DATEONLY,
       allowNull: false
-    }
+    },
+    rating: {
+      type: DataTypes.JSON,
+      defaultValue: [{ restId: null, qualification: null }],
+    },
   })
 };

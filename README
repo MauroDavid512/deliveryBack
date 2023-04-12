@@ -10,6 +10,11 @@ rest/1
 
 Cuando se coloca un número seguido de "rest/" se obtiene un detalle del restaurante que tenga un id igual al número
 
+rest/?category=Comida Rápida
+
+Devuelve un array con todos los restaurantes que sirvan comidas con categoria "Comida Rápida"
+
+
 rest/restCreator
 
 Esta ruta es la que se emplea para la creación de restaurantes
@@ -23,6 +28,10 @@ El objeto que debe recibir debe tener el siguiente formato:
     description: TEXT,
     user: [IdDelUsuario]
 }
+
+rest/rating/1
+
+Devuelve el promedio de calificaciones hechas por los usuarios del restauirante con id 1
 
 Comida:
 
@@ -70,6 +79,45 @@ Traerá un array con las categorías disponibles
 
 Traerá un detalle de la comida cuyo id sea igual a 2
 
+/users/
+
+Trae array con todos los usuarios en base de datos
+
+users/1
+
+Trae detalle del usuario con id = 1
+
+users/rating
+
+Ruta de comando PUT, agrega una puntuación a un restaurante. Se le debe colocar por querys userId y restId respectivamente y por body enviar el siguiente objeto:
+
+{
+    qualification: NUMBER
+}
+
+users/userCreator
+
+Ruta de creación de usuarios. Se le debe pasar un objeto del siguiente formato:
+
+{
+    name: STRING,
+    img: STRING,
+    email: STRING,
+    birthday: DATE
+}
+
+
+order/
+
+Traerá un array con todas las ordenes en base de datos. A su vez se le pueden aplicar querys
+
+?idOrder=1 ------------>  Traerá un array que contenga la orden pedida con el id 1
+
+?idRest=1 ------------->  Filtrará el array con las ordenes que sean solo del restaurante con el id 1
+
+?idUser=1 ------------->  Filtrará el array con las ordenes que sean solo del usuario con el id 1
+
+idRest e idUser son combinables, de esta forma se pueden obtener todos los pedidos que un usuario haya realizado a un restaurante en particular.
 
 
 
