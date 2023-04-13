@@ -396,8 +396,28 @@ const getOrder = async (idOrder, idRest, idUser) => {
     return order
 }
 
-const changeOrderState = async (state) => {
+const changeOrderState = async (task, idOrder) => {
+    const order = await Order.findByPk(idOrder);
 
+    if(task == "received"){
+        order.update({
+            order,
+            received:true
+        });
+    }else if( task == "onWay"){
+        order.update({
+            order,
+            received:true,
+            onWay:true
+        });
+    }else if( task == "delivered"){
+        order.update({
+            order,
+            received:true,
+            onWay:true,
+            delivered:true
+        });
+    }
 }
 
 
@@ -474,10 +494,30 @@ const preloadFood = async () => {
         }
         return data;
     } catch (error) {
-        console.log("ERROR EN preloadRest", error.message);
+        console.log("ERROR EN preloadFood", error.message);
     }
 };
 
+
+const preloadOrders = async () => {
+
+    try {
+        let data = preload.order.map((order) => {
+            return {
+                items: order.items,
+                rest: order.rest,
+                user: order.user
+            };
+        });
+
+        for (const order of data) {
+            createOrder(order);
+        }
+        return data;
+    } catch (error) {
+        console.log("ERROR EN preloadOrders", error.message);
+    }
+};
 
 
 
@@ -496,9 +536,11 @@ module.exports = {
     getCategories,
     createOrder,
     getOrder,
+    changeOrderState,
     //Preloads
     preloadUsers,
     preloadRest,
-    preloadFood
+    preloadFood,
+    preloadOrders
 }
 

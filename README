@@ -134,5 +134,20 @@ Ruta de creación de ordenes. Se le debe pasar un objeto con el siguiente format
     user: [2]    ------> Id del usuario que realiza el pedido
 }
 
+Algo importante de aclarar es que las ordenes tienen tres propiedades que por default están en false.
+{
+    received: false  (recibido)
+    onWay: false     (en camino)
+    delivered: false (entregado)
+}
+
+Estos estados pueden cambiar utilizando las siguientes rutas
+
+order/received?idOrder=1
+order/onWay?idOrder=1
+order/delivered?idOrder=1
+
+Cada una modifica a la propiedad correspondiente de la orden a la que pertenezca el id pasado por query. Transformando el booleano a true.
+
 
 
