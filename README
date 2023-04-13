@@ -33,6 +33,10 @@ rest/rating/1
 
 Devuelve el promedio de calificaciones hechas por los usuarios del restauirante con id 1
 
+rest?category=Pizza
+
+Devuelve array con todos los restaurantes que sirvan comida de categoria Pizza.
+
 COMIDA
 
 food/
