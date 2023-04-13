@@ -1,6 +1,6 @@
 Utilización de rutas:
 
-Restaurantes:
+RESTAURANTES
 
 rest/
 
@@ -26,14 +26,14 @@ El objeto que debe recibir debe tener el siguiente formato:
     phone: NUMBER,
     shipping: NUMBER,
     description: TEXT,
-    user: [IdDelUsuario]
+    user: [1] ----> id del usuario administrador
 }
 
 rest/rating/1
 
 Devuelve el promedio de calificaciones hechas por los usuarios del restauirante con id 1
 
-Comida:
+COMIDA
 
 food/
 
@@ -66,7 +66,7 @@ El objeto que debe recibir debe tener el siguiente formato:
     description: TEXT,
     categories: ["Categoria1", "Categoria2"],
     promo: false
-    rest: [idDelRestaurante]
+    rest: [1]  ----> id del restaurante que sirve esa comida
 }
 
 Se le puede colocar infinitas categorias y la propiedad promo solo es necesaria si se coloca en true. De lo contrario se puede omitir.
@@ -78,6 +78,9 @@ Traerá un array con las categorías disponibles
 /food/2
 
 Traerá un detalle de la comida cuyo id sea igual a 2
+
+
+USUARIOS
 
 /users/
 
@@ -107,6 +110,8 @@ Ruta de creación de usuarios. Se le debe pasar un objeto del siguiente formato:
 }
 
 
+ORDENES - PEDIDOS
+
 order/
 
 Traerá un array con todas las ordenes en base de datos. A su vez se le pueden aplicar querys
@@ -125,8 +130,8 @@ Ruta de creación de ordenes. Se le debe pasar un objeto con el siguiente format
 
 {
     items: [1,2,3] ------> Id de las comidas pedidas
-    "rest": [2],   ------> Id del restaurante
-    "user": [2]    ------> Id del usuario que realiza el pedido
+    rest: [2],   ------> Id del restaurante
+    user: [2]    ------> Id del usuario que realiza el pedido
 }
 
 
