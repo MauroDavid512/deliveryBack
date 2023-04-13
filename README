@@ -119,5 +119,15 @@ Traerá un array con todas las ordenes en base de datos. A su vez se le pueden a
 
 idRest e idUser son combinables, de esta forma se pueden obtener todos los pedidos que un usuario haya realizado a un restaurante en particular.
 
+order/orderCreator
+
+Ruta de creación de ordenes. Se le debe pasar un objeto con el siguiente formato:
+
+{
+    items: [1,2,3] ------> Id de las comidas pedidas
+    "rest": [2],   ------> Id del restaurante
+    "user": [2]    ------> Id del usuario que realiza el pedido
+}
+
 
 
