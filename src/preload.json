@@ -2,48 +2,56 @@
 	"users": [
 		{
 			"name": "Mauro David",
+			"password": "cacatuas",
 			"img": "ajgoijahogi",
 			"email": "mauroalos@hotmail.com",
 			"birthday": "1995-06-30"
 		},
 		{
 			"name": "Leandro",
+			"password": "cacatuas",
 			"img": "ajgoijahogi",
 			"email": "mauroalos@hotmail.com",
 			"birthday": "1995-06-30"
 		},
 		{
 			"name": "Alan",
+			"password": "cacatuas",
 			"img": "ajgoijahogi",
 			"email": "mauroalos@hotmail.com",
 			"birthday": "1995-06-30"
 		},
 		{
 			"name": "Jaime",
+			"password": "cacatuas",
 			"img": "ajgoijahogi",
 			"email": "mauroalos@hotmail.com",
 			"birthday": "1995-06-30"
 		},
 		{
 			"name": "Candelaria",
+			"password": "cacatuas",
 			"img": "ajgoijahogi",
 			"email": "mauroalos@hotmail.com",
 			"birthday": "1995-06-30"
 		},
 		{
 			"name": "Maxi",
+			"password": "cacatuas",
 			"img": "ajgoijahogi",
 			"email": "mauroalos@hotmail.com",
 			"birthday": "1995-06-30"
 		},
 		{
 			"name": "Angel",
+			"password": "cacatuas",
 			"img": "ajgoijahogi",
 			"email": "mauroalos@hotmail.com",
 			"birthday": "1995-06-30"
 		},
 		{
 			"name": "Mauro David",
+			"password": "cacatuas",
 			"img": "ajgoijahogi",
 			"email": "mauroalos@hotmail.com",
 			"birthday": "1995-06-30"
@@ -53,6 +61,7 @@
 		{
 			"name": "Sushi maniacos",
 			"img": "https://media-cdn.tripadvisor.com/media/photo-s/1a/53/aa/26/somos-un-restaurante.jpg",
+			"email": "sushimaniacos@gmail.com",
 			"adress": "San Juan 3432",
 			"phone": "320199933",
 			"shipping": 140,
@@ -61,6 +70,7 @@
 		{
 			"name": "BurgerKing",
 			"img": "https://assets.entrepreneur.com/content/3x2/2000/1645822504-GettyImages-1370781946.jpg",
+			"email": "burgerking@gmail.com",
 			"adress": "Santiago 3432",
 			"phone": "320199933",
 			"shipping": 99,
@@ -69,6 +79,7 @@
 		{
 			"name": "McDonalds",
 			"img": "https://cdn.computerhoy.com/sites/navi.axelspringer.es/public/media/image/2018/05/secretos-mcdonalds.jpg?tf=3840x",
+			"email": "mencanta@gmail.com",
 			"adress": "Av. Lagos 3432",
 			"phone": "320199933",
 			"shipping": 230,
@@ -77,6 +88,7 @@
 		{
 			"name": "El Asador Argentino",
 			"img": "https://www.disfrutandosingluten.es/wp-content/uploads/2018/11/Restaurantes-Comida-Rapida-Espana-sin-gluten.jpg",
+			"email": "el_asadorargentino@gmail.com",
 			"adress": "Av. Oroño 3432",
 			"phone": "320199933",
 			"shipping": 230,

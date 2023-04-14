@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { getFood, foodCreator, getFoodDetail, getCategories } = require('./utils')
+const { getFood, foodCreator, getFoodDetail, getCategories, updateFood } = require('./utils')
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -56,8 +56,8 @@ router.get('/', async (req, res) => {
 
 router.post('/foodCreator', async (req, res) => {
     try {
-        const dataRest = req.body
-        const newFood = foodCreator(dataRest)
+        const dataFood = req.body
+        const newFood = foodCreator(dataFood)
         res.status(201).json(newFood)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -72,6 +72,17 @@ router.get("/categories", async (req, res) => {
         res.status(404).json({ error: error.message })
     }
 })
+
+router.put('/edit', async (req, res) => {
+    try{
+      const { idFood } = req.query
+      const { edit } = req.body
+      let info = await updateFood(idFood, edit)
+      res.status(200).json(info)
+    }catch(error){
+      res.status(400).json({ error: error.message })
+    }
+  })
 
 
 

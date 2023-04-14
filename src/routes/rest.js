@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { restCreator, getAllRest, getRestDetail, getRating } = require('./utils')
+const { restCreator, getAllRest, getRestDetail, getRating, updateRest } = require('./utils')
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -60,6 +60,17 @@ router.get("/:id", async (req, res) => {
     res.status(200).json(info)
   } catch (error) {
     res.status(404).json({ error: error.message })
+  }
+})
+
+router.put('/edit', async (req, res) => {
+  try{
+    const { idRest } = req.query
+    const { edit } = req.body
+    let info = await updateRest(idRest, edit)
+    res.status(200).json(info)
+  }catch(error){
+    res.status(400).json({ error: error.message })
   }
 })
 

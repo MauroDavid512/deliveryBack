@@ -8,6 +8,10 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    password:{
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     img:{
       type: DataTypes.STRING,
       allowNull: true
@@ -24,5 +28,9 @@ module.exports = (sequelize) => {
       type: DataTypes.JSON,
       defaultValue: [{ restId: null, qualification: null }],
     },
+    favorites: {
+      type: DataTypes.ARRAY(DataTypes.DOUBLE),
+      defaultValue: []
+    }
   })
 };

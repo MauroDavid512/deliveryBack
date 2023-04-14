@@ -9,7 +9,7 @@ const { Restaurant, Users, Food, Order } = require('../db.js');
 
 const restCreator = async (dataRest) => {
     try {
-        const { name, img, adress, phone, shipping, user, description } = dataRest; // esto para el req.body en post
+        const { name, img, email, adress, phone, shipping, user, description } = dataRest; // esto para el req.body en post
         let User = await Users.findAll({
             where: { id: user }
         })
@@ -17,6 +17,7 @@ const restCreator = async (dataRest) => {
         const newRest = await Restaurant.create({
             name,
             img,
+            email,
             adress,
             phone,
             shipping,
@@ -124,6 +125,20 @@ const getRestDetail = async (id, menu) => {
     }
 }
 
+const updateRest = async (idRest, updateInfo) => {
+    try{
+        const rest = await Restaurant.findByPk(idRest);
+        console.log(`idRest=${idRest} - updateInfo=${updateInfo}`)
+        await rest.update({
+            ...updateInfo
+        })
+        return rest
+
+    }catch(error){
+        console.log("Error en updateRest -->"+error.message)
+    }
+}
+
 
 
 
@@ -150,7 +165,7 @@ const getAllUsers = async () => {
 
 const userCreator = async (dataUser) => {
     try {
-        const { name, img, email, birthday } = dataUser; // esto para el req.body en post
+        const { name, password, img, email, birthday } = dataUser; // esto para el req.body en post
         const aux1 = await getAllUsers()
         //Traigo los datos existentes en la base para corroborar que no se repita ningun pokemon
         const aux2 = aux1.find(e => e.name === name)
@@ -158,6 +173,7 @@ const userCreator = async (dataUser) => {
 
         const newRest = await Users.create({
             name,
+            password,
             img,
             email,
             birthday
@@ -197,7 +213,6 @@ const getUserDetail = async (id) => {
 const doRating = async (userId, restId, qualification) => {
     try {
         const user = await Users.findByPk(userId);
-        if (!user) throw new Error(`Usuario con ID ${userId} no encontrado`);
     
         const newRating = [...user.rating, { restId, qualification }];
         await user.update({ rating: newRating });
@@ -207,6 +222,21 @@ const doRating = async (userId, restId, qualification) => {
         console.log(`Error en doRating: ${error.message}`);
       }
 }
+
+const favorites = async (idUser, idRest) => {
+    try{
+        const user = await Users.findByPk(idUser);
+        const newFavorites = [...user.favorites, idRest]
+        await user.update({favorites:newFavorites})
+
+    }catch(error){
+        console.log("Error en favorites: "+ error.message)
+    }
+}
+
+
+
+
 
 // -----------Funciones de Food--------------------
 
@@ -308,6 +338,19 @@ const getCategories = async () => {
       });
     
       return uniqueCategories;
+}
+
+const updateFood = async (idFood, updateInfo) => {
+    try{
+        const rest = await Food.findByPk(idFood);
+        await rest.update({
+            ...updateInfo
+        })
+        return rest
+
+    }catch(error){
+        console.log("Error en updateRest -->"+error.message)
+    }
 }
 
 //-----------FUNCIONES ORDER-------------------
@@ -421,6 +464,59 @@ const changeOrderState = async (task, idOrder) => {
 }
 
 
+//----------FUNCIONES SEARCHBAR-------------
+
+function levenshteinDistance(a, b) {
+    if (a.length === 0) return b.length
+    if (b.length === 0) return a.length
+  
+    const matrix = []
+  
+
+    for (let i = 0; i <= b.length; i++) {
+      matrix[i] = [i]
+    }
+  
+    for (let j = 0; j <= a.length; j++) {
+      matrix[0][j] = j
+    }
+  
+
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1]
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1, // Sustitución
+            matrix[i][j - 1] + 1, // Inserción
+            matrix[i - 1][j] + 1 // Eliminación
+          )
+        }
+      }
+    }
+  
+    return matrix[b.length][a.length]
+  }
+
+  const search = async (str) => {
+    let allFood = await getFood()
+    let allRest = await getAllRest()
+    let foodAndRest = [...allFood, ...allRest]
+  
+    let searchResult = foodAndRest.filter(e => {
+      const distance = levenshteinDistance(e.name, str)
+      const includesWord = e.name.toLowerCase().includes(str.toLowerCase())
+      const includesCategory = e.categories && e.categories.some(category =>
+        levenshteinDistance(category, str) <= 3 ||
+        category.toLowerCase().includes(str.toLowerCase())
+      )
+      return includesWord || distance <= 3 || includesCategory
+    })
+  
+    return searchResult
+  }
+
 
 //----------FUNCIONES PRELOAD-------------------
 
@@ -432,6 +528,7 @@ const preloadUsers = async () => {
         let data = preload.users.map((user) => {
             return {
                 name: user.name,
+                password: user.password,
                 img: user.img,
                 email: user.email,
                 birthday: user.birthday
@@ -455,6 +552,7 @@ const preloadRest = async () => {
             return {
                 name: rest.name,
                 img: rest.img,
+                email: rest.email,
                 adress: rest.adress,
                 phone: rest.phone,
                 shipping: rest.shipping,
@@ -522,21 +620,29 @@ const preloadOrders = async () => {
 
 
 module.exports = {
+    //Funciones /rest
     restCreator,
     getAllRest,
     getRestDetail,
     getRating,
+    updateRest,
+    //Funciones /users
     doRating,
     userCreator,
     getAllUsers,
     getUserDetail,
+    favorites,
+    //Funciones /food
     getFood,
     foodCreator,
     getFoodDetail,
     getCategories,
+    updateFood,
+    //Funciones /order
     createOrder,
     getOrder,
     changeOrderState,
+    search,
     //Preloads
     preloadUsers,
     preloadRest,

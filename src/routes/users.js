@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const {userCreator, getAllUsers, getUserDetail, doRating} = require('./utils')
+const {userCreator, getAllUsers, getUserDetail, doRating, favorites} = require('./utils')
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -28,6 +28,18 @@ router.put('/rating', async (req, res) => {
         const info = await doRating(userId, restId, qualification)
         res.status(201).json(info)
 
+    }catch(error){
+        res.status(400).json({ error: error.message })
+    }
+}
+
+)
+
+router.put('/updateFavorites', async (req, res) => {
+    try{
+        const {idUser, idRest} = req.query
+        const info = await favorites(parseInt(idUser), parseInt(idRest))
+        res.status(201).json(info)
     }catch(error){
         res.status(400).json({ error: error.message })
     }

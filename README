@@ -37,6 +37,17 @@ rest?category=Pizza
 
 Devuelve array con todos los restaurantes que sirvan comida de categoria Pizza.
 
+rest/edit?idRest=1
+
+Edita la información de un restaurante existente. Se le debe pasar por body un objeto del siguiente formato:
+
+{
+    edit:{
+        propiedad a modificar: Valor de la propiedad modificada 
+    }
+}
+
+
 COMIDA
 
 food/
@@ -82,6 +93,16 @@ Traerá un array con las categorías disponibles
 /food/2
 
 Traerá un detalle de la comida cuyo id sea igual a 2
+
+rest/edit?idFood=1
+
+Edita la información de una comida existente. Se le debe pasar por body un objeto del siguiente formato:
+
+{
+    edit:{
+        propiedad a modificar: Valor de la propiedad modificada 
+    }
+}
 
 
 USUARIOS
@@ -153,5 +174,10 @@ order/delivered?idOrder=1
 
 Cada una modifica a la propiedad correspondiente de la orden a la que pertenezca el id pasado por query. Transformando el booleano a true.
 
+BUSQUEDA
 
+search/:id
+
+Traerá un array con todo lo que se asemeje al texto dentro del mismo, tanto comidas como restaurantes
+Si un restaurante tiene Pizza en el nombre y hay comidas que tengan pizza en el nombre traerá ambas cosas. Se pueden diferenciar por sus propiedades.
 
