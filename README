@@ -136,7 +136,7 @@ Ruta de creación de usuarios. Se le debe pasar un objeto del siguiente formato:
 
 users/updateFavorites?idUser=1&idRest=1
 
-Ruta para agregar favoritos a usuario.
+Ruta para agregar favoritos a usuario. idUser = id del usuario a actualizar. idRest = id del restaurante a agregar.
 
 
 ORDENES - PEDIDOS
