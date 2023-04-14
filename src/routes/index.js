@@ -7,7 +7,8 @@ const router = Router();
 const rest = require('./rest')
 const users = require('./users')
 const food = require('./food')
-const categories = require('./categories')
+const order = require('./order')
+const search = require('./search')
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
@@ -15,7 +16,8 @@ const categories = require('./categories')
 router.use('/rest', rest)
 router.use('/users', users)
 router.use('/food', food)
-router.use('/categories', categories)
+router.use('/order', order)
+router.use('/search', search)
 
 
 
