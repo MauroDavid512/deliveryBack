@@ -1,14 +1,15 @@
 //Aqui estarán todas las funciones que se utilizaran durante el ruteo.
 
-const axios = require('axios')
-const { Restaurant, Users, Food, Categories } = require('../db.js');
+const axios = require('axios');
+const { Op } = require('sequelize');
+const { Restaurant, Users, Food, Order } = require('../db.js');
 
 
 // Funciones de /rest
 
 const restCreator = async (dataRest) => {
     try {
-        const { name, img, adress, phone, shipping, user, description } = dataRest; // esto para el req.body en post
+        const { name, img, email, adress, phone, shipping, user, description } = dataRest; // esto para el req.body en post
         let User = await Users.findAll({
             where: { id: user }
         })
@@ -16,6 +17,7 @@ const restCreator = async (dataRest) => {
         const newRest = await Restaurant.create({
             name,
             img,
+            email,
             adress,
             phone,
             shipping,
@@ -30,34 +32,55 @@ const restCreator = async (dataRest) => {
 };
 
 
-
-const restUpdating = async (id, restaurantData) => {
+const getRating = async (restId) =>{
     try {
-        const restaurant = await Restaurant.update(restaurantData, { where: { id } });
-
-        return restaurant;
-    } catch (err) {
-        throw err;
-    }
-
+        // Obtener todas las calificaciones de los usuarios para el restaurante con el id "restId"
+        const ratings = await Users.findAll({
+          where: sequelize.literal(`rating @> '[{"restId": ${restId}}]'`)
+        });
+    
+        // Calcular el promedio de las calificaciones
+        const sum = ratings.reduce((total, rating) => total + rating.rating.find(r => r.restId === restId).qualification, 0);
+        const average = sum / ratings.length;
+    
+        return average;
+      } catch (error) {
+        console.log(`Error en getRating: ${error.message}`);
+        return null;
+      }
 }
 
 
-
-
-const getAllRest = async () => {
+const getAllRest = async (category) => {
     try {
 
         const allRest = await Restaurant.findAll({
             include: {
                 model: Food,
-                attributes: ['id', 'name', 'img', 'price', 'description'],
+                attributes: ['id', 'name', 'img', 'price', 'description', 'categories'],
                 throug: {
                     attributes: []
                 }
             }
         })
-        return allRest
+        if(category){
+            const aux = [];
+
+            for (let i = 0; i < allRest.length; i++) {
+              const food = allRest[i].food;
+              for (let j = 0; j < food.length; j++) {
+                const categories = food[j].categories;
+                if (categories.includes(category)) {
+                  aux.push(allRest[i]);
+                  break;
+                }
+              }
+            }
+          
+            return aux;
+        }else{
+            return allRest
+        }
     } catch (error) {
         console.log('Error en getAllRest ', error.message)
     }
@@ -102,6 +125,20 @@ const getRestDetail = async (id, menu) => {
     }
 }
 
+const updateRest = async (idRest, updateInfo) => {
+    try{
+        const rest = await Restaurant.findByPk(idRest);
+        console.log(`idRest=${idRest} - updateInfo=${updateInfo}`)
+        await rest.update({
+            ...updateInfo
+        })
+        return rest
+
+    }catch(error){
+        console.log("Error en updateRest -->"+error.message)
+    }
+}
+
 
 
 
@@ -128,7 +165,7 @@ const getAllUsers = async () => {
 
 const userCreator = async (dataUser) => {
     try {
-        const { name, img, email, birthday } = dataUser; // esto para el req.body en post
+        const { name, password, img, email, birthday } = dataUser; // esto para el req.body en post
         const aux1 = await getAllUsers()
         //Traigo los datos existentes en la base para corroborar que no se repita ningun pokemon
         const aux2 = aux1.find(e => e.name === name)
@@ -136,6 +173,7 @@ const userCreator = async (dataUser) => {
 
         const newRest = await Users.create({
             name,
+            password,
             img,
             email,
             birthday
@@ -172,11 +210,39 @@ const getUserDetail = async (id) => {
 }
 
 
+const doRating = async (userId, restId, qualification) => {
+    try {
+        const user = await Users.findByPk(userId);
+    
+        const newRating = [...user.rating, { restId, qualification }];
+        await user.update({ rating: newRating });
+    
+        console.log(`Calificación agregada para el usuario con ID ${userId}`);
+      } catch (error) {
+        console.log(`Error en doRating: ${error.message}`);
+      }
+}
+
+const favorites = async (idUser, idRest) => {
+    try{
+        const user = await Users.findByPk(idUser);
+        const newFavorites = [...user.favorites, idRest]
+        await user.update({favorites:newFavorites})
+
+    }catch(error){
+        console.log("Error en favorites: "+ error.message)
+    }
+}
+
+
+
+
+
 // -----------Funciones de Food--------------------
 
 const foodCreator = async (dataFood) => {
     try {
-        const { name, img, price, description,category, rest } = dataFood; // esto para el req.body en post
+        const { name, img, price, description,categories, rest, promo } = dataFood; // esto para el req.body en post
         let Rest = await Restaurant.findAll({
             where: { id: rest }
         })
@@ -185,7 +251,8 @@ const foodCreator = async (dataFood) => {
             img,
             price,
             description,
-            category
+            categories,
+            promo
         });
 
         newFood.addRestaurant(Rest)
@@ -197,9 +264,11 @@ const foodCreator = async (dataFood) => {
     }
 };
 
-const getFood = async (idRest) => {
-    try {
-        const allFood = await Food.findAll({
+
+
+const getFood = async (idRest, category, minPrice, maxPrice, promo) => {
+    try{
+        let aux = await Food.findAll({
             include: {
                 model: Restaurant,
                 attributes: ['id', 'name', 'img'],
@@ -208,19 +277,31 @@ const getFood = async (idRest) => {
                 }
             }
         })
-        if (idRest) {
-            let foodRest = allFood.filter(e => e.restaurants[0].id == idRest)
-            return foodRest
-        } else {
-            return allFood
+        if(idRest){
+            aux = aux.filter(e => e.restaurants[0].id == idRest)
         }
-    } catch (error) {
-        console.log("Error en funcion getFood", error.message)
+        if(category){
+            aux = aux.filter(e => e.categories.includes(category))
+        }
+        if(minPrice){
+            aux = aux.filter(e => e.price >= minPrice)
+        }
+        if(maxPrice){
+            aux = aux.filter(e => e.price <= maxPrice)
+        }
+        if(promo){
+            aux = aux.filter(e => e.promo === true)
+        }
+    
+        return aux
+    }catch(error){
+        console.log('Error en getFood ', error.message)
     }
+
 }
 
 const getFoodDetail = async (id) => {
-    const allUser = await getFood()
+    const allFood = await getFood()
 
     /*
     El proximo condicional me permite emplear esta misma funcion tanto cuando
@@ -246,11 +327,11 @@ const getFoodDetail = async (id) => {
 }
 
 
-const getCategoriess = async () => {
+const getCategories = async () => {
     const allFood = await Food.findAll()
     let categories = []
     allFood.forEach(e => {
-        categories.push(...e.category)
+        categories.push(...e.categories)
     });
     const uniqueCategories = categories.filter((element, index, array) => {
         return index === array.indexOf(element);
@@ -259,26 +340,182 @@ const getCategoriess = async () => {
       return uniqueCategories;
 }
 
-const filterFood = async (idRest, category, minPrice, maxPrice) => {
-    let aux = await Food.findAll()
-    if(idRest){
-        aux = await getFood(idRest)
-    }
-    if(category){
-        aux = aux.filter(e => e.category.includes(category))
-    }
-    if(minPrice){
-        aux = aux.filter(e => e.price >= minPrice)
-    }
-    if(maxPrice){
-        aux = aux.filter(e => e.price <= maxPrice)
-    }
+const updateFood = async (idFood, updateInfo) => {
+    try{
+        const rest = await Food.findByPk(idFood);
+        await rest.update({
+            ...updateInfo
+        })
+        return rest
 
-    return aux
+    }catch(error){
+        console.log("Error en updateRest -->"+error.message)
+    }
+}
+
+//-----------FUNCIONES ORDER-------------------
+
+
+const createOrder = async (order) => {
+    const { items, rest, user } = order
+    let Rest = await Restaurant.findAll({
+        where: { id: rest }
+    })
+    let User = await Users.findAll({
+        where: { id: user }
+    })
+    let Foods = await Food.findAll({
+        where: { id: items}
+    })
+    let newOrder = await Order.create({})
+
+    newOrder.addRestaurant(Rest)
+    newOrder.addUsers(User)
+    newOrder.addFood(Foods)
+    return newOrder
+}
+
+const getOrder = async (idOrder, idRest, idUser) => {
+    if(idOrder){
+        let order = await Order.findAll({
+            where: { id: idOrder },
+            include: [
+                {
+                    model: Restaurant,
+                    attributes: ['id', 'name'],
+                    through: {
+                        attributes: []
+                    }
+                },
+                {
+                    model: Food,
+                    attributes: ['id', 'name'],
+                    through: {
+                        attributes: []
+                    }
+                },
+                {
+                    model: Users,
+                    attributes: ['id', 'name'],
+                    through: {
+                        attributes: []
+                    }
+                }
+            ]
+        })
+        return order
+    }
+    let order = await Order.findAll({
+        include: [
+            {
+                model: Restaurant,
+                attributes: ['id', 'name'],
+                through: {
+                    attributes: []
+                }
+            },
+            {
+                model: Food,
+                attributes: ['id', 'name'],
+                through: {
+                    attributes: []
+                }
+            },
+            {
+                model: Users,
+                attributes: ['id', 'name'],
+                through: {
+                    attributes: []
+                }
+            }
+        ]
+    })
+    if(idRest){
+        order = order.filter(e=> e.restaurants[0].id == idRest)
+    }
+    if(idUser){
+        order = order.filter(e => e.users[0].id == idUser)
+    }
+    return order
+}
+
+const changeOrderState = async (task, idOrder) => {
+    const order = await Order.findByPk(idOrder);
+
+    if(task == "received"){
+        order.update({
+            order,
+            received:true
+        });
+    }else if( task == "onWay"){
+        order.update({
+            order,
+            received:true,
+            onWay:true
+        });
+    }else if( task == "delivered"){
+        order.update({
+            order,
+            received:true,
+            onWay:true,
+            delivered:true
+        });
+    }
 }
 
 
+//----------FUNCIONES SEARCHBAR-------------
 
+function levenshteinDistance(a, b) {
+    if (a.length === 0) return b.length
+    if (b.length === 0) return a.length
+  
+    const matrix = []
+  
+
+    for (let i = 0; i <= b.length; i++) {
+      matrix[i] = [i]
+    }
+  
+    for (let j = 0; j <= a.length; j++) {
+      matrix[0][j] = j
+    }
+  
+
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1]
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1, // Sustitución
+            matrix[i][j - 1] + 1, // Inserción
+            matrix[i - 1][j] + 1 // Eliminación
+          )
+        }
+      }
+    }
+  
+    return matrix[b.length][a.length]
+  }
+
+  const search = async (str) => {
+    let allFood = await getFood()
+    let allRest = await getAllRest()
+    let foodAndRest = [...allFood, ...allRest]
+  
+    let searchResult = foodAndRest.filter(e => {
+      const distance = levenshteinDistance(e.name, str)
+      const includesWord = e.name.toLowerCase().includes(str.toLowerCase())
+      const includesCategory = e.categories && e.categories.some(category =>
+        levenshteinDistance(category, str) <= 3 ||
+        category.toLowerCase().includes(str.toLowerCase())
+      )
+      return includesWord || distance <= 3 || includesCategory
+    })
+  
+    return searchResult
+  }
 
 
 //----------FUNCIONES PRELOAD-------------------
@@ -291,6 +528,7 @@ const preloadUsers = async () => {
         let data = preload.users.map((user) => {
             return {
                 name: user.name,
+                password: user.password,
                 img: user.img,
                 email: user.email,
                 birthday: user.birthday
@@ -314,6 +552,7 @@ const preloadRest = async () => {
             return {
                 name: rest.name,
                 img: rest.img,
+                email: rest.email,
                 adress: rest.adress,
                 phone: rest.phone,
                 shipping: rest.shipping,
@@ -342,7 +581,8 @@ const preloadFood = async () => {
                 price: food.price,
                 description: food.description,
                 rest: food.rest,
-                category: food.category
+                categories: food.categories,
+                promo: food.promo
 
             };
         });
@@ -352,65 +592,61 @@ const preloadFood = async () => {
         }
         return data;
     } catch (error) {
-        console.log("ERROR EN preloadRest", error.message);
+        console.log("ERROR EN preloadFood", error.message);
     }
 };
 
-const preloadCategories = async () => {
+
+const preloadOrders = async () => {
 
     try {
-        let data = preload.categories.map((category) => {
+        let data = preload.order.map((order) => {
             return {
-                name: category.name,
+                items: order.items,
+                rest: order.rest,
+                user: order.user
             };
         });
 
-        for (const category of data) {
-            createCategory(category);
+        for (const order of data) {
+            createOrder(order);
         }
         return data;
     } catch (error) {
-        console.log("ERROR EN preloadCategories", error.message);
+        console.log("ERROR EN preloadOrders", error.message);
     }
 };
 
-//----------FUNCIONES DE CATEGORIAS-------------------
-const getCategories = async () => {
-    try {
-        const allCategories = await Categories.findAll();
-        return allCategories;
-    } catch (error) {
-        console.log("Error en getCategories", error.message);
-    }
-}
-const createCategory = async (body) => {
-    try {
-        const creation = await Categories.create(body);
-        return creation;
-    } catch (error) {
-        console.log("Error en getCategories", error.message);
-    }
-}
+
 
 module.exports = {
+    //Funciones /rest
     restCreator,
-    restUpdating,
     getAllRest,
     getRestDetail,
+    getRating,
+    updateRest,
+    //Funciones /users
+    doRating,
     userCreator,
     getAllUsers,
     getUserDetail,
+    favorites,
+    //Funciones /food
     getFood,
     foodCreator,
     getFoodDetail,
     getCategories,
-    getCategoriess,
-    createCategory,
-    filterFood,
+    updateFood,
+    //Funciones /order
+    createOrder,
+    getOrder,
+    changeOrderState,
+    search,
     //Preloads
     preloadUsers,
     preloadRest,
     preloadFood,
-    preloadCategories
+    preloadOrders
 }
 

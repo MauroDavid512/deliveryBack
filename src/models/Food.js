@@ -20,9 +20,14 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    category: {
+    categories: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true
+    },
+    promo: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
     }
   });
 };

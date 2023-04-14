@@ -1,31 +1,47 @@
 const { Router } = require('express')
-const { getFood, foodCreator, getFoodDetail, filterFood, getCategoriess } = require('./utils')
+const { getFood, foodCreator, getFoodDetail, getCategories, updateFood } = require('./utils')
 const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        console.log(0)
-        const { name } = req.query
-        const { rest } = req.query
+
+        /* La ruta GET /food tambien sirve como filtro si se le agregan los siguientes querys:
+        ?idrest=(id del restaurante)
+        ?category=(Categoria de la comida)
+        ?minprice=(Precio mínimo dispuesto a pagar)
+        ?maxprice=(Precio máximo dispuesto a pagar)
+
+
+       
+
+        A su vez son combinables, se pueden aplicar varios al mismo tiempo de la siguiente forma:
+
+        "food?idrest=2&category=Pizza&maxprice=2000"
+
+        ?promo=1 ----> traerá todas las promociones. Si se combina con cualquiera de los demás filtros tambien funcionará
+        
+        Por lo tanto si se desean conocer las promociones activas de un restaurante en particular basta con escribir:
+
+        "food?idrest=(id del restauran)&promo=1"
+
+        */
+        const { name, idrest, category, minprice, maxprice, promo } = req.query
         if (name) {
             try {
                 const restDetail = await getFoodDetail(name)
-                console.log(1)
                 res.status(200).json(restDetail)
             } catch (error) {
                 res.status(404).json({ error: error.message })
             }
-        } else if (rest) {
+        } else if (idrest || category || minprice || maxprice || promo) {
             try {
-                const restFood = await getFood(parseInt(rest))
-                console.log(2 + " " + restFood)
-                res.status(200).json(restFood)
+                const filtered = await getFood(idrest, category, minprice, maxprice, promo)
+                res.status(200).json(filtered)
             } catch (error) {
                 res.status(404).json({ error: error.message })
             }
 
         } else {
-            console.log(3)
             const info = await getFood()
             res.status(200).json(info)
         }
@@ -34,27 +50,14 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/filter', async (req,res) => {
-    try{
-        const {idrest, category, minprice, maxprice} = req.query
 
-        const filtered = await filterFood(idrest, category, minprice, maxprice)
-        console.log("idrest --->"+idrest)
-        console.log("category --->"+category)
-        console.log("minprice --->"+minprice)
-        console.log("maxprice --->"+maxprice)
-        res.status(201).json(filtered)
-    }catch(error){
-        res.status(401).json({error: error.message})
-    }
-})
 
 
 
 router.post('/foodCreator', async (req, res) => {
     try {
-        const dataRest = req.body
-        const newFood = foodCreator(dataRest)
+        const dataFood = req.body
+        const newFood = foodCreator(dataFood)
         res.status(201).json(newFood)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -62,13 +65,24 @@ router.post('/foodCreator', async (req, res) => {
 })
 
 router.get("/categories", async (req, res) => {
-    try{
-        const categories = await getCategoriess()
+    try {
+        const categories = await getCategories()
         res.status(200).json(categories)
-    }catch(error){
-        res.status(404).json({error: error.message})
+    } catch (error) {
+        res.status(404).json({ error: error.message })
     }
 })
+
+router.put('/edit', async (req, res) => {
+    try{
+      const { idFood } = req.query
+      const { edit } = req.body
+      let info = await updateFood(idFood, edit)
+      res.status(200).json(info)
+    }catch(error){
+      res.status(400).json({ error: error.message })
+    }
+  })
 
 
 
