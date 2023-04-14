@@ -134,6 +134,10 @@ Ruta de creación de usuarios. Se le debe pasar un objeto del siguiente formato:
     birthday: DATE
 }
 
+users/updateFavorites?idUser=1&idRest=1
+
+Ruta para agregar favoritos a usuario.
+
 
 ORDENES - PEDIDOS
 
