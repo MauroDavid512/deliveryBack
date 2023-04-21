@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { restCreator, getAllRest, getRestDetail, getRating, updateRest } = require('./utils')
+const { restCreator, getAllRest, getRestDetail, getRating, updateRest, deleteRest } = require('./utils')
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -38,13 +38,23 @@ router.post('/restCreator', async (req, res) => {
 router.get('/rating/:id', async (req, res) => {
   try{
     const idRest = req.params.id
-    const info = getRating(idRest)
+    const info = await getRating(parseInt(idRest))
+    console.log('info '+info)
     res.status(200).json(info)
   }catch(error){
     res.status(404).json({ error: error.message })
   }
 })
 
+router.delete('/delete/:id', async (req, res) => {
+  try{
+    const { id } = req.params
+    deleteRest(id)
+    res.status(200).json("Elemento Borrado")
+  }catch(error){
+    res.status(400).json({error: error.message})
+  }
+})
 
 router.get("/:id", async (req, res) => {
   try {
@@ -66,7 +76,7 @@ router.get("/:id", async (req, res) => {
 router.put('/edit', async (req, res) => {
   try{
     const { idRest } = req.query
-    const { edit } = req.body
+    const edit = req.body
     let info = await updateRest(idRest, edit)
     res.status(200).json(info)
   }catch(error){
